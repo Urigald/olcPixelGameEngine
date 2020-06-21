@@ -129,7 +129,7 @@
 
 	Author
 	~~~~~~
-	David Barr, aka javidx9, ©OneLoneCoder 2018, 2019, 2020
+	David Barr, aka javidx9, Â©OneLoneCoder 2018, 2019, 2020
 
 	2.01: Made renderer and platform static for multifile projects
 	2.02: Added Decal destructor, optimised Pixel constructor
@@ -680,6 +680,7 @@ namespace olc
 		// Flat fills a triangle between points (x1,y1), (x2,y2) and (x3,y3)
 		void FillTriangle(int32_t x1, int32_t y1, int32_t x2, int32_t y2, int32_t x3, int32_t y3, Pixel p = olc::WHITE);
 		void FillTriangle(const olc::vi2d& pos1, const olc::vi2d& pos2, const olc::vi2d& pos3, Pixel p = olc::WHITE);
+		void FillTriangle(const olc::vi2d& pos, const int& r, Pixel p = olc::WHITE);
 		// Draws an entire sprite at well in my defencelocation (x,y)
 		void DrawSprite(int32_t x, int32_t y, Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
 		void DrawSprite(const olc::vi2d& pos, Sprite *sprite, uint32_t scale = 1, uint8_t flip = olc::Sprite::NONE);
@@ -1710,6 +1711,23 @@ namespace olc
 		DrawLine(x1, y1, x2, y2, p);
 		DrawLine(x2, y2, x3, y3, p);
 		DrawLine(x3, y3, x1, y1, p);
+	}
+
+	void PixelGameEngine::FillTriangle(const olc::vi2d& pos, const int& r, Pixel p)
+	{
+		// arbitrary approximation based on trigo
+		// float r_to_half_h = 1.1587;
+
+		//////////////////////////////////// simplifications  :::
+		// int top_x = pos.x;
+		// int top_y = pos.y - r;
+		// int bottom_left_x = pos.x - (r / r_to_hh);
+		// int bottom_left_y = pos.y - (r / 2);
+		// int bottom_right_x = pos.x + (r / r_to_hh);
+		// int bottom_right_y = pos.y - (r / 2);
+		// FillTriangle(top_x, top_y, bottom_left_x, bottom_left_y, bottom_right_x, bottom_right_y, p);
+
+		FillTriangle(pos.x, pos.y - r, pos.x - (r / 1.1587f), pos.y + (r / 2), pos.x + (r / 1.1587f), pos.y + (r / 2), p);
 	}
 
 	void PixelGameEngine::FillTriangle(const olc::vi2d& pos1, const olc::vi2d& pos2, const olc::vi2d& pos3, Pixel p)
